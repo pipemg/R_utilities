@@ -1,12 +1,23 @@
-library(shiny)
-library(DT)
+list.of.packages <- c("shiny", "DT" ,"ggplot2") #List the libraries
+new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])] #Get the new packages
+if(length(new.packages)) install.packages(new.packages, dependencies=TRUE, clean=TRUE, verbose=FALSE,  repos="https://cloud.r-project.org") #Install the packages
+
+library(shiny) # load shiny
+library(DT)# DT
+library(ggplot2) # load ggplot
+
+
 runApp(list(
   ui = fluidPage(
   titlePanel("Reaction Pattern Index Calculator - Single"),
 	  sidebarLayout(
 	    sidebarPanel(
 	      strong(h3("Upload the file you whant to use")),      
-	      textAreaInput('org', "Organ:", value = "", cols = 300, rows = 1, placeholder = "Organ Ej. liver", resize = "both"),
+	      selectInput('org', "Organ:",c("Gills" = "g", "Kidney" = "k",
+                  "Liver" = "l", "Skin"="s")),
+
+
+
 	      fileInput('file1', 'Table of Importance Factors Reaction Pattern',accept=c('text/tsv','text/csv', 'text/comma-separated-values,text/plain', '.csv', '.tsv')),
 	      checkboxInput('header', 'Header', TRUE),
 
@@ -21,31 +32,26 @@ runApp(list(
 
 	      fixedRow(
 		column(6,br(),checkboxInput('rp1', 'Reaction Pattern 1', FALSE)),
-		column(3,numericInput(inputId="min_rp1", label="MIN ROW", value=0, min=0)),
-		column(3,numericInput(inputId="max_rp1", label="MAX ROW", value=0, min=0))),
+		column(3,numericInput(inputId="min_rp1", label="MIN ROW", value=0, min=0))),
 
 
 	      fixedRow(
 		column(6,br(),checkboxInput('rp2', 'Reaction Pattern 2', FALSE)),
-		column(3,numericInput(inputId="min_rp2", label="MIN ROW", value=0, min=0)),
-		column(3,numericInput(inputId="max_rp2", label="MAX ROW", value=0, min=0))),
+		column(3,numericInput(inputId="min_rp2", label="MIN ROW", value=0, min=0))),
 
 
 	      fixedRow(
 		column(6,br(),checkboxInput('rp3', 'Reaction Pattern 3', FALSE)),
-		column(3,numericInput(inputId="min_rp3", label="MIN ROW", value=0, min=0)),
-		column(3,numericInput(inputId="max_rp3", label="MAX ROW", value=0, min=0))),
+		column(3,numericInput(inputId="min_rp3", label="MIN ROW", value=0, min=0))),
 
 
 	      fixedRow(
 		column(6,br(),checkboxInput('rp4', 'Reaction Pattern 4', FALSE)),
-		column(3,numericInput(inputId="min_rp4", label="MIN ROW", value=0, min=0)),
-		column(3,numericInput(inputId="max_rp4", label="MAX ROW", value=0, min=0))),
+		column(3,numericInput(inputId="min_rp4", label="MIN ROW", value=0, min=0))),
 
 	      fixedRow(
 		column(6,br(),checkboxInput('rp5', 'Reaction Pattern 5', FALSE)),
-		column(3,numericInput(inputId="min_rp5", label="MIN ROW", value=0, min=0)),
-		column(3,numericInput(inputId="max_rp5", label="MAX ROW", value=0, min=0))),
+		column(3,numericInput(inputId="min_rp5", label="MIN ROW", value=0, min=0))),
 
 
 	     tags$hr(),	      
@@ -57,13 +63,14 @@ runApp(list(
 	      textOutput('names'),
              
 	      tabsetPanel(
-			tabPanel('Reaction Pattern 1', DT::dataTableOutput("Trp1"), tableOutput('I_org_rp1')),
-      			tabPanel('Reaction Pattern 2', DT::dataTableOutput("Trp2"), tableOutput('I_org_rp2')),
+			tabPanel('Reaction Pattern 1', DT::dataTableOutput("Trp1"),plotOutput("boxplot1")),
+      			tabPanel('Reaction Pattern 2', DT::dataTableOutput("Trp2"), plotOutput("boxplot2")),
       			tabPanel('Reaction Pattern 3', DT::dataTableOutput("Trp3"), tableOutput('I_org_rp3')),
       			tabPanel('Reaction Pattern 4', DT::dataTableOutput("Trp4"), tableOutput('I_org_rp4')),
       			tabPanel('Reaction Pattern 5', DT::dataTableOutput("Trp5"), tableOutput('I_org_rp5')),
       			tabPanel('Results')
     	      ),
+	      
 	      textOutput('description')
 	    )
 	  )
@@ -90,11 +97,37 @@ runApp(list(
 
 			if (is.null(inFile))
 			      return(NULL)
-			    
+
+			w_rp1=switch(input$org,"g"=c(1,1), "k"=c(1,1),"l"=c(1,1), "s"=c(1,1))
+
 			rt<-read.table(inFile$datapath, header=input$header, 
-					sep=input$sep, quote=input$quote)
-			rt<-rt[input$min_rp1:input$max_rp1,]
-			rt$RowSums<-rowSums(rt)
+					sep=input$sep, quote=input$quote, row.names=1)
+			rt<-rt[input$min_rp1:(input$min_rp1+length(w_rp1)-1),]
+
+			#Calculamos la suma Total de cada Columna
+               		#rt["TOTAL",]<-colSums(rt) #esta suma no es muy informativa
+			#Calculamos el I_rp1_org de cada muestra
+               		rt[paste("I_rp1",input$org,sep="_"),]<-t(colSums(apply(rt[1:length(w_rp1),],2,function(x) x*w_rp1)))
+
+			#Agregamos la suma por renglones 
+			Total<-rowSums(rt)
+			#Agregamos la media por renglones 
+			Mean<-round(apply(rt,1,mean), digits = 2)
+			#Agregamos la moda por renglones 
+			Median<-round(apply(rt,1,median), digits = 2)
+			#Agregamos la varianza por renglones 
+			Var<-round(apply(rt,1,var), digits = 2) 
+			#Agregamos la desviación estandar por renglones 
+			Sd<-round(apply(rt,1,sd), digits = 2) 
+			#Agregamos las columnas
+			rt$TOTAL=Total
+			rt$MEAN=Mean
+			rt$MEDIAN=Median
+			rt$VAR=Var
+			rt$SD=Sd
+			#Agregamos la columna de pesos
+ 			rt<-cbind(W=c(w_rp1," "),rt)
+
 
 		}
 		rt
@@ -108,23 +141,31 @@ runApp(list(
 	) #close options
  )
 
+	output$boxplot1 <- reactivePlot(function() {
+	     # check for the input variable
 
-	    output$I_org_rp1 <- renderTable({
 
+		w_rp1=switch(input$org,"g"=c(1,1), "k"=c(1,1),"l"=c(1,1), "s"=c(1,1))
 		inFile <- input$file1
 
 		if (is.null(inFile))
-		      return(NULL)
-		    
-		rt<-read.table(inFile$datapath, header=input$header, 
-			sep=input$sep, quote=input$quote)
-		rt<-t(colSums(rt[input$min_rp1:input$max_rp1,]))
+			return(NULL)
 
-		if(input$rp1 == FALSE){
-			rt=NULL
-		}
-		rt
-	    })
+		rt<-read.table(inFile$datapath, header=input$header,sep=input$sep, quote=input$quote, row.names=1)
+		rt<-rt[input$min_rp1:(input$min_rp1+length(w_rp1)-1),]
+		alt<-rownames(rt)
+		samp<-colnames(rt)
+		rt<-as.vector(unlist(c(rt))) #convert to a vector
+		fac<-rep(alt,length(samp))
+		df<-data.frame(value=rt,fac)
+		p <- ggplot(df, aes(as.factor(fac), value)) + 
+			geom_boxplot(outlier.size = 1.5) + 
+			xlab(colnames(rt))
+		print(p)
+	})
+
+
+
 
 	    output$Trp2 <- DT::renderDataTable({
 
@@ -132,12 +173,39 @@ runApp(list(
 
 		if (is.null(inFile))
 		      return(NULL)
+		w_rp2=switch(input$org,"g"=c(1,1,1,2,2,3, 1,1,1,2,2,3), "k"=c(1,1,1,2,2,3, 1,1,1,2,2,3, 1,
+1, 1, 2, 2, 3),"l"=c(1,1,1,2,2,3, 1,1,1,2,2,3, 1,1,1,2,2,3), "s"=c(1,1,1,2,2,3, 2, 1,1,1,2,2,3))
+
 		    
 		rt<-read.table(inFile$datapath, header=input$header, 
-				sep=input$sep, quote=input$quote)
-		rt<-rt[input$min_rp2:input$max_rp2,]
+				sep=input$sep, quote=input$quote,  row.names=1)
+		rt<-rt[input$min_rp2:(input$min_rp2+length(w_rp2)-1),]
 
-		rt$RowSums<-rowSums(rt)
+
+		#Calculamos la suma Total de cada Columna
+               	#rt["TOTAL",]<-colSums(rt) #esta suma no es muy informativa
+		#Calculamos el I_rp1_org de cada muestra
+               	rt[paste("I_rp2",input$org,sep="_"),]<-t(colSums(apply(rt[1:length(w_rp2),],2,function(x) x*w_rp2)))
+		#Agregamos la suma por renglones 
+		Total<-rowSums(rt)
+		#Agregamos la media por renglones 
+		Mean<-round(apply(rt,1,mean), digits = 2)
+		#Agregamos la moda por renglones 
+		Median<-round(apply(rt,1,median), digits = 2)
+		#Agregamos la varianza por renglones 
+		Var<-round(apply(rt,1,var), digits = 2) 
+		#Agregamos la desviación estandar por renglones 
+		Sd<-round(apply(rt,1,sd), digits = 2) 
+		#Agregamos las columnas
+		rt$TOTAL=Total
+		rt$MEAN=Mean
+		rt$MEDIAN=Median
+		rt$VAR=Var
+		rt$SD=Sd
+		#Agregamos la columna de pesos
+ 		rt<-cbind(W=c(w_rp2," "),rt)
+
+
 
 		if(input$rp2 == FALSE){
 			rt=NULL
@@ -151,24 +219,30 @@ runApp(list(
     "}"		)  #close JS
 	) #close options
 )
+	output$boxplot2 <- reactivePlot(function() {
+	     # check for the input variable
 
-	    output$I_org_rp2 <- renderTable({
 
+		w_rp2=switch(input$org,"g"=c(1,1,1,2,2,3, 1,1,1,2,2,3), "k"=c(1,1,1,2,2,3, 1,1,1,2,2,3, 1,
+1, 1, 2, 2, 3),"l"=c(1,1,1,2,2,3, 1,1,1,2,2,3, 1,1,1,2,2,3), "s"=c(1,1,1,2,2,3, 2, 1,1,1,2,2,3))
 		inFile <- input$file1
+
 
 		if (is.null(inFile))
 		      return(NULL)
-		    
-		rt<-read.table(inFile$datapath, header=input$header, 
-			sep=input$sep, quote=input$quote)
-		rt<-t(colSums(rt[input$min_rp2:input$max_rp2,]))
 
-		if(input$rp2 == FALSE){
-			rt=NULL
-		}
-		rt
-
-	    })
+		rt<-read.table(inFile$datapath, header=input$header,sep=input$sep, quote=input$quote, row.names=1)
+		rt<-rt[input$min_rp2:(input$min_rp2+length(w_rp2)-1),]
+		alt<-rownames(rt)
+		samp<-colnames(rt)
+		rt<-as.vector(unlist(c(rt))) #convert to a vector
+		fac<-rep(alt,length(samp))
+		df<-data.frame(value=rt,fac)
+		p <- ggplot(df, aes(as.factor(fac), value)) + 
+			geom_boxplot(outlier.size = 1.5) + 
+			xlab(colnames(rt))
+		print(p)
+	})
 	     
 
 	    output$Trp3 <- DT::renderDataTable({
@@ -179,9 +253,39 @@ runApp(list(
 		      return(NULL)
 		    
 		rt<-read.table(inFile$datapath, header=input$header, 
-				sep=input$sep, quote=input$quote)
-		rt<-rt[input$min_rp3:input$max_rp3,]
-		rt$RowSums<-rowSums(rt)
+				sep=input$sep, quote=input$quote,  row.names=1)
+
+		w_rp3=switch(input$org,"g"=c(1,2, 1,2), "k"=c(1,2, 1,2, 1,2),"l"=c(1,2, 1,2, 1,2), "s"=c(1,2, 1,2))
+
+
+		rt<-rt[input$min_rp3:(input$min_rp3+length(w_rp3)-1),]
+
+
+		#Calculamos la suma Total de cada Columna
+               	#rt["TOTAL",]<-colSums(rt) #esta suma no es muy informativa
+		#Calculamos el I_rp1_org de cada muestra
+               	rt[paste("I_rp3",input$org,sep="_"),]<-t(colSums(apply(rt[1:length(w_rp3),],2,function(x) x*w_rp3)))
+		#Agregamos la suma por renglones 
+		Total<-rowSums(rt)
+		#Agregamos la media por renglones 
+		Mean<-round(apply(rt,1,mean), digits = 2)
+		#Agregamos la moda por renglones 
+		Median<-round(apply(rt,1,median), digits = 2)
+		#Agregamos la varianza por renglones 
+		Var<-round(apply(rt,1,var), digits = 2) 
+		#Agregamos la desviación estandar por renglones 
+		Sd<-round(apply(rt,1,sd), digits = 2) 
+		#Agregamos las columnas
+		rt$TOTAL=Total
+		rt$MEAN=Mean
+		rt$MEDIAN=Median
+		rt$VAR=Var
+		rt$SD=Sd
+		#Agregamos la columna de pesos
+ 		rt<-cbind(W=c(w_rp3," "),rt)
+
+
+
 		if(input$rp3 == FALSE){
 			rt=NULL
 		}
@@ -203,8 +307,15 @@ runApp(list(
 		      return(NULL)
 		    
 		rt<-read.table(inFile$datapath, header=input$header, 
-			sep=input$sep, quote=input$quote)
-		rt<-t(colSums(rt[input$min_rp3:input$max_rp3,]))
+			sep=input$sep, quote=input$quote,  row.names=1)
+
+		#Alterations RP3: Hypertrophy, Hyperplasia, Hyperplasia of mucous cells
+		#Alterations Specific Kidney: Thickening of Bowman's capsular membrane 
+		#Alterations Specific Liver: Wall proliferation of bile ducts or ductels
+		#Alterations Specific Skin: Hyperplasia of mucous cells
+		w_rp3=switch(input$org,"g"=c(1,2, 1,2), "k"=c(1,2, 1,2, 1,2),"l"=c(1,2, 1,2, 1,2), "s"=c(1,2, 1,2))
+
+		rt<-t(colSums(apply(rt[input$min_rp3:(input$min_rp3+length(w_rp3)-1),],2,function(x) x*w_rp3)))
 
 		if(input$rp3 == FALSE){
 			rt=NULL
@@ -222,9 +333,37 @@ runApp(list(
 		      return(NULL)
 		    
 		rt<-read.table(inFile$datapath, header=input$header, 
-				sep=input$sep, quote=input$quote)
-		rt<-rt[input$min_rp4:input$max_rp4,]
-		rt$RowSums<-rowSums(rt)
+				sep=input$sep, quote=input$quote,  row.names=1)
+
+		w_rp4=switch(input$org,"g"=c(1,1,2), "k"=c(1,1,2),"l"=c(1,1,2), "s"=c(1,1,2))
+	
+		rt<-rt[input$min_rp4:(input$min_rp4+length(w_rp4)-1),]
+
+
+
+		#Calculamos la suma Total de cada Columna
+               	#rt["TOTAL",]<-colSums(rt) #esta suma no es muy informativa
+		#Calculamos el I_rp1_org de cada muestra
+               	rt[paste("I_rp4",input$org,sep="_"),]<-t(colSums(apply(rt[1:length(w_rp4),],2,function(x) x*w_rp4)))
+		#Agregamos la suma por renglones 
+		Total<-rowSums(rt)
+		#Agregamos la media por renglones 
+		Mean<-round(apply(rt,1,mean), digits = 2)
+		#Agregamos la moda por renglones 
+		Median<-round(apply(rt,1,median), digits = 2)
+		#Agregamos la varianza por renglones 
+		Var<-round(apply(rt,1,var), digits = 2) 
+		#Agregamos la desviación estandar por renglones 
+		Sd<-round(apply(rt,1,sd), digits = 2) 
+		#Agregamos las columnas
+		rt$TOTAL=Total
+		rt$MEAN=Mean
+		rt$MEDIAN=Median
+		rt$VAR=Var
+		rt$SD=Sd
+		#Agregamos la columna de pesos
+ 		rt<-cbind(W=c(w_rp4," "),rt)
+
 		if(input$rp4 == FALSE){
 			rt=NULL
 		}
@@ -246,8 +385,12 @@ runApp(list(
 		      return(NULL)
 		    
 		rt<-read.table(inFile$datapath, header=input$header, 
-			sep=input$sep, quote=input$quote)
-		rt<-t(colSums(rt[input$min_rp4:input$max_rp4,]))
+			sep=input$sep, quote=input$quote,  row.names=1)
+
+		#Alterations Exudate, Activation of RES, Infiltration
+		w_rp4=switch(input$org,"g"=c(1,1,2), "k"=c(1,1,2),"l"=c(1,1,2), "s"=c(1,1,2))
+
+		rt<-t(colSums(rt[input$min_rp4:(input$min_rp4+length(w_rp4)-1),]))
 
 		if(input$rp4 == FALSE){
 			rt=NULL
@@ -266,9 +409,36 @@ runApp(list(
 		      return(NULL)
 		    
 		rt<-read.table(inFile$datapath, header=input$header, 
-				sep=input$sep, quote=input$quote)
-		rt<-rt[input$min_rp5:input$max_rp5,]
-		rt$RowSums<-rowSums(rt)
+				sep=input$sep, quote=input$quote,  row.names=1)
+		w_rp5=switch(input$org,"g"=c(2,3), "k"=c(2,3),"l"=c(2,3), "s"=c(2,3))
+		rt<-rt[input$min_rp5:(input$min_rp5+length(w_rp5)-1),]
+
+
+
+		#Calculamos la suma Total de cada Columna
+               	#rt["TOTAL",]<-colSums(rt) #esta suma no es muy informativa
+		#Calculamos el I_rp1_org de cada muestra
+               	rt[paste("I_rp5",input$org,sep="_"),]<-t(colSums(apply(rt[1:length(w_rp5),],2,function(x) x*w_rp5)))
+		#Agregamos la suma por renglones 
+		Total<-rowSums(rt)
+		#Agregamos la media por renglones 
+		Mean<-round(apply(rt,1,mean), digits = 2)
+		#Agregamos la moda por renglones 
+		Median<-round(apply(rt,1,median), digits = 2)
+		#Agregamos la varianza por renglones 
+		Var<-round(apply(rt,1,var), digits = 2) 
+		#Agregamos la desviación estandar por renglones 
+		Sd<-round(apply(rt,1,sd), digits = 2) 
+		#Agregamos las columnas
+		rt$TOTAL=Total
+		rt$MEAN=Mean
+		rt$MEDIAN=Median
+		rt$VAR=Var
+		rt$SD=Sd
+		#Agregamos la columna de pesos
+ 		rt<-cbind(W=c(w_rp5," "),rt)
+
+
 
 		if(input$rp5 == FALSE){
 			rt=NULL
@@ -291,8 +461,11 @@ runApp(list(
 		      return(NULL)
 		    
 		rt<-read.table(inFile$datapath, header=input$header, 
-			sep=input$sep, quote=input$quote)
-		rt<-t(colSums(rt[input$min_rp5:input$max_rp5,]))
+			sep=input$sep, quote=input$quote,  row.names=1)
+
+		#Alterations: Benign Tumor, Malignant Tumor
+		w_rp5=switch(input$org,"g"=c(2,3), "k"=c(2,3),"l"=c(2,3), "s"=c(2,3))
+		rt<-t(colSums(rt[input$min_rp5:(input$min_rp5+length(w_rp5)-1),]))
 
 		if(input$rp5 == FALSE){
 			rt=NULL
@@ -311,7 +484,7 @@ runApp(list(
 		if (is.null(inFile))
 		      return(NULL)
 		    
-		cn<-colnames(read.table(inFile$datapath, header=input$header, sep=input$sep, quote=input$quote))
+		cn<-colnames(read.table(inFile$datapath, header=input$header, sep=input$sep, quote=input$quote,  row.names=1))
 		paste0(cn)
 
 	    })
