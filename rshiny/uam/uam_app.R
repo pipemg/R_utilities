@@ -12,23 +12,28 @@ runApp(list(
   titlePanel("Reaction Pattern Index Calculator - Single"),
 	  sidebarLayout(
 	    sidebarPanel(
+
+#SideBar Input
+	#File
 	      strong(h3("Upload the file you whant to use")),      
-	      selectInput('org', "Organ:",c("Gills" = "g", "Kidney" = "k",
-                  "Liver" = "l", "Skin"="s")),
-
-
-
 	      fileInput('file1', 'Table of Importance Factors Reaction Pattern',accept=c('text/tsv','text/csv', 'text/comma-separated-values,text/plain', '.csv', '.tsv')),
 	      checkboxInput('header', 'Header', TRUE),
+
 
 	      column(6,radioButtons('sep', 'Separator', c(Tab='\t', Comma=',', Semicolon=';'), '\t')),
 	      column(6,radioButtons('quote', 'Quote', c(None='', 'Double Quote'='"', 'Single Quote'="'"), '')),
 
 
+	#Select the organs
+
+	      checkboxInput('gills', 'Gills', FALSE),
+	      checkboxInput('kidney', 'Kidney', FALSE),
+	      checkboxInput('liver', 'Liver', FALSE),
+	      checkboxInput('skin', 'Skin', FALSE),
+
 	      column(12,  tags$hr()),
 		
 	      strong(h4("Select the Reaction Patterns to use")),     
-
 
 	      fixedRow(
 		column(6,br(),checkboxInput('rp1', 'Reaction Pattern 1', FALSE)),
@@ -56,18 +61,54 @@ runApp(list(
 
 	     tags$hr(),	      
 
-	      p(textAreaInput('desc', "Description", value = "", cols = 300, rows = 3, placeholder = "Name", resize = "both")
+	      p(textAreaInput('desc', "Remarks:", value = "", cols = 300, rows = 3, placeholder = "Name", resize = "both")
 	    )),
+
+
+
+#Output Panel
 	    mainPanel(
 	      textOutput('intro'),
 	      textOutput('names'),
-             
+	
+     
+	      strong(h3("Gills")),      
 	      tabsetPanel(
-			tabPanel('Reaction Pattern 1', DT::dataTableOutput("Trp1"),plotOutput("boxplot1")),
-      			tabPanel('Reaction Pattern 2', DT::dataTableOutput("Trp2"), plotOutput("boxplot2")),
-      			tabPanel('Reaction Pattern 3', DT::dataTableOutput("Trp3"), tableOutput('I_org_rp3')),
-      			tabPanel('Reaction Pattern 4', DT::dataTableOutput("Trp4"), tableOutput('I_org_rp4')),
-      			tabPanel('Reaction Pattern 5', DT::dataTableOutput("Trp5"), tableOutput('I_org_rp5')),
+			tabPanel('Reaction Pattern 1', DT::dataTableOutput("Trp1_g"), plotOutput("boxplot1_g")),
+      			tabPanel('Reaction Pattern 2', DT::dataTableOutput("Trp2_g"), plotOutput("boxplot2_g")),
+      			tabPanel('Reaction Pattern 3', DT::dataTableOutput("Trp3_g"), plotOutput("boxplot3_g")),
+      			tabPanel('Reaction Pattern 4', DT::dataTableOutput("Trp4_g"), plotOutput("boxplot4_g")),
+      			tabPanel('Reaction Pattern 5', DT::dataTableOutput("Trp5_g"), plotOutput("boxplot5_g")),
+      			tabPanel('Results')
+    	      ),
+
+	      strong(h3("Kidney")),      
+	      tabsetPanel(
+			tabPanel('Reaction Pattern 1', DT::dataTableOutput("Trp1_k"), plotOutput("boxplot1_k")),
+      			tabPanel('Reaction Pattern 2', DT::dataTableOutput("Trp2_k"), plotOutput("boxplot2_k")),
+      			tabPanel('Reaction Pattern 3', DT::dataTableOutput("Trp3_k"), plotOutput("boxplot3_k")),
+      			tabPanel('Reaction Pattern 4', DT::dataTableOutput("Trp4_k"), plotOutput("boxplot4_k")),
+      			tabPanel('Reaction Pattern 5', DT::dataTableOutput("Trp5_k"), plotOutput("boxplot5_k")),
+      			tabPanel('Results')
+    	      ),
+
+	      strong(h3("Liver")),      
+	      tabsetPanel(
+			tabPanel('Reaction Pattern 1', DT::dataTableOutput("Trp1_l"), plotOutput("boxplot1_l")),
+      			tabPanel('Reaction Pattern 2', DT::dataTableOutput("Trp2_l"), plotOutput("boxplot2_l")),
+      			tabPanel('Reaction Pattern 3', DT::dataTableOutput("Trp3_l"), plotOutput("boxplot3_l")),
+      			tabPanel('Reaction Pattern 4', DT::dataTableOutput("Trp4_l"), plotOutput("boxplot4_l")),
+      			tabPanel('Reaction Pattern 5', DT::dataTableOutput("Trp5_l"), plotOutput("boxplot5_l")),
+      			tabPanel('Results')
+    	      ),
+
+	      strong(h3("Skin")),      
+	      tabsetPanel(
+			tabPanel('Reaction Pattern 1', DT::dataTableOutput("Trp1_s"), plotOutput("boxplot1_s")),
+      			tabPanel('Reaction Pattern 2', DT::dataTableOutput("Trp2_s"), plotOutput("boxplot2_s")),
+      			tabPanel('Reaction Pattern 3', DT::dataTableOutput("Trp3_s"), plotOutput("boxplot3_s")),
+      			tabPanel('Reaction Pattern 4', DT::dataTableOutput("Trp4_s"), plotOutput("boxplot4_s")),
+      			tabPanel('Reaction Pattern 5', DT::dataTableOutput("Trp5_s"), plotOutput("boxplot5_s")),
       			tabPanel('Results')
     	      ),
 	      
@@ -84,396 +125,6 @@ runApp(list(
 
 
 	  server = function(input, output) {
-
-	    output$Trp1 <- DT::renderDataTable({ 
-
-		if(input$rp1 == FALSE){
-
-			rt=NULL
-
-		}else{
-
-			inFile <- input$file1
-
-			if (is.null(inFile))
-			      return(NULL)
-
-			w_rp1=switch(input$org,"g"=c(1,1), "k"=c(1,1),"l"=c(1,1), "s"=c(1,1))
-
-			rt<-read.table(inFile$datapath, header=input$header, 
-					sep=input$sep, quote=input$quote, row.names=1)
-			rt<-rt[input$min_rp1:(input$min_rp1+length(w_rp1)-1),]
-
-			#Calculamos la suma Total de cada Columna
-               		#rt["TOTAL",]<-colSums(rt) #esta suma no es muy informativa
-			#Calculamos el I_rp1_org de cada muestra
-               		rt[paste("I_rp1",input$org,sep="_"),]<-t(colSums(apply(rt[1:length(w_rp1),],2,function(x) x*w_rp1)))
-
-			#Agregamos la suma por renglones 
-			Total<-rowSums(rt)
-			#Agregamos la media por renglones 
-			Mean<-round(apply(rt,1,mean), digits = 2)
-			#Agregamos la moda por renglones 
-			Median<-round(apply(rt,1,median), digits = 2)
-			#Agregamos la varianza por renglones 
-			Var<-round(apply(rt,1,var), digits = 2) 
-			#Agregamos la desviación estandar por renglones 
-			Sd<-round(apply(rt,1,sd), digits = 2) 
-			#Agregamos las columnas
-			rt$TOTAL=Total
-			rt$MEAN=Mean
-			rt$MEDIAN=Median
-			rt$VAR=Var
-			rt$SD=Sd
-			#Agregamos la columna de pesos
- 			rt<-cbind(W=c(w_rp1," "),rt)
-
-
-		}
-		rt
-		 
-
-	    }, options=list(  
-		initComplete = JS(
-    "function(settings, json) {",
-    "$(this.api().table().header()).css({'background-color': '#000', 'color': '#fff'});",
-    "}"		)  #close JS
-	) #close options
- )
-
-	output$boxplot1 <- reactivePlot(function() {
-	     # check for the input variable
-
-
-		w_rp1=switch(input$org,"g"=c(1,1), "k"=c(1,1),"l"=c(1,1), "s"=c(1,1))
-		inFile <- input$file1
-
-		if (is.null(inFile))
-			return(NULL)
-
-		rt<-read.table(inFile$datapath, header=input$header,sep=input$sep, quote=input$quote, row.names=1)
-		rt<-rt[input$min_rp1:(input$min_rp1+length(w_rp1)-1),]
-		alt<-rownames(rt)
-		samp<-colnames(rt)
-		rt<-as.vector(unlist(c(rt))) #convert to a vector
-		fac<-rep(alt,length(samp))
-		df<-data.frame(value=rt,fac)
-		p <- ggplot(df, aes(as.factor(fac), value)) + 
-			geom_boxplot(outlier.size = 1.5) + 
-			xlab(colnames(rt))
-		print(p)
-	})
-
-
-
-
-	    output$Trp2 <- DT::renderDataTable({
-
-		inFile <- input$file1
-
-		if (is.null(inFile))
-		      return(NULL)
-		w_rp2=switch(input$org,"g"=c(1,1,1,2,2,3, 1,1,1,2,2,3), "k"=c(1,1,1,2,2,3, 1,1,1,2,2,3, 1,
-1, 1, 2, 2, 3),"l"=c(1,1,1,2,2,3, 1,1,1,2,2,3, 1,1,1,2,2,3), "s"=c(1,1,1,2,2,3, 2, 1,1,1,2,2,3))
-
-		    
-		rt<-read.table(inFile$datapath, header=input$header, 
-				sep=input$sep, quote=input$quote,  row.names=1)
-		rt<-rt[input$min_rp2:(input$min_rp2+length(w_rp2)-1),]
-
-
-		#Calculamos la suma Total de cada Columna
-               	#rt["TOTAL",]<-colSums(rt) #esta suma no es muy informativa
-		#Calculamos el I_rp1_org de cada muestra
-               	rt[paste("I_rp2",input$org,sep="_"),]<-t(colSums(apply(rt[1:length(w_rp2),],2,function(x) x*w_rp2)))
-		#Agregamos la suma por renglones 
-		Total<-rowSums(rt)
-		#Agregamos la media por renglones 
-		Mean<-round(apply(rt,1,mean), digits = 2)
-		#Agregamos la moda por renglones 
-		Median<-round(apply(rt,1,median), digits = 2)
-		#Agregamos la varianza por renglones 
-		Var<-round(apply(rt,1,var), digits = 2) 
-		#Agregamos la desviación estandar por renglones 
-		Sd<-round(apply(rt,1,sd), digits = 2) 
-		#Agregamos las columnas
-		rt$TOTAL=Total
-		rt$MEAN=Mean
-		rt$MEDIAN=Median
-		rt$VAR=Var
-		rt$SD=Sd
-		#Agregamos la columna de pesos
- 		rt<-cbind(W=c(w_rp2," "),rt)
-
-
-
-		if(input$rp2 == FALSE){
-			rt=NULL
-		}
-		rt
-
-	    }, options=list(  
-		initComplete = JS(
-    "function(settings, json) {",
-    "$(this.api().table().header()).css({'background-color': '#000', 'color': '#fff'});",
-    "}"		)  #close JS
-	) #close options
-)
-	output$boxplot2 <- reactivePlot(function() {
-	     # check for the input variable
-
-
-		w_rp2=switch(input$org,"g"=c(1,1,1,2,2,3, 1,1,1,2,2,3), "k"=c(1,1,1,2,2,3, 1,1,1,2,2,3, 1,
-1, 1, 2, 2, 3),"l"=c(1,1,1,2,2,3, 1,1,1,2,2,3, 1,1,1,2,2,3), "s"=c(1,1,1,2,2,3, 2, 1,1,1,2,2,3))
-		inFile <- input$file1
-
-
-		if (is.null(inFile))
-		      return(NULL)
-
-		rt<-read.table(inFile$datapath, header=input$header,sep=input$sep, quote=input$quote, row.names=1)
-		rt<-rt[input$min_rp2:(input$min_rp2+length(w_rp2)-1),]
-		alt<-rownames(rt)
-		samp<-colnames(rt)
-		rt<-as.vector(unlist(c(rt))) #convert to a vector
-		fac<-rep(alt,length(samp))
-		df<-data.frame(value=rt,fac)
-		p <- ggplot(df, aes(as.factor(fac), value)) + 
-			geom_boxplot(outlier.size = 1.5) + 
-			xlab(colnames(rt))
-		print(p)
-	})
-	     
-
-	    output$Trp3 <- DT::renderDataTable({
-
-		inFile <- input$file1
-
-		if (is.null(inFile))
-		      return(NULL)
-		    
-		rt<-read.table(inFile$datapath, header=input$header, 
-				sep=input$sep, quote=input$quote,  row.names=1)
-
-		w_rp3=switch(input$org,"g"=c(1,2, 1,2), "k"=c(1,2, 1,2, 1,2),"l"=c(1,2, 1,2, 1,2), "s"=c(1,2, 1,2))
-
-
-		rt<-rt[input$min_rp3:(input$min_rp3+length(w_rp3)-1),]
-
-
-		#Calculamos la suma Total de cada Columna
-               	#rt["TOTAL",]<-colSums(rt) #esta suma no es muy informativa
-		#Calculamos el I_rp1_org de cada muestra
-               	rt[paste("I_rp3",input$org,sep="_"),]<-t(colSums(apply(rt[1:length(w_rp3),],2,function(x) x*w_rp3)))
-		#Agregamos la suma por renglones 
-		Total<-rowSums(rt)
-		#Agregamos la media por renglones 
-		Mean<-round(apply(rt,1,mean), digits = 2)
-		#Agregamos la moda por renglones 
-		Median<-round(apply(rt,1,median), digits = 2)
-		#Agregamos la varianza por renglones 
-		Var<-round(apply(rt,1,var), digits = 2) 
-		#Agregamos la desviación estandar por renglones 
-		Sd<-round(apply(rt,1,sd), digits = 2) 
-		#Agregamos las columnas
-		rt$TOTAL=Total
-		rt$MEAN=Mean
-		rt$MEDIAN=Median
-		rt$VAR=Var
-		rt$SD=Sd
-		#Agregamos la columna de pesos
- 		rt<-cbind(W=c(w_rp3," "),rt)
-
-
-
-		if(input$rp3 == FALSE){
-			rt=NULL
-		}
-		rt
-
-	    }, options=list(  
-		initComplete = JS(
-    "function(settings, json) {",
-    "$(this.api().table().header()).css({'background-color': '#000', 'color': '#fff'});",
-    "}"		)  #close JS
-	) #close options
-)
-
-	    output$I_org_rp3 <- renderTable({
-
-		inFile <- input$file1
-
-		if (is.null(inFile))
-		      return(NULL)
-		    
-		rt<-read.table(inFile$datapath, header=input$header, 
-			sep=input$sep, quote=input$quote,  row.names=1)
-
-		#Alterations RP3: Hypertrophy, Hyperplasia, Hyperplasia of mucous cells
-		#Alterations Specific Kidney: Thickening of Bowman's capsular membrane 
-		#Alterations Specific Liver: Wall proliferation of bile ducts or ductels
-		#Alterations Specific Skin: Hyperplasia of mucous cells
-		w_rp3=switch(input$org,"g"=c(1,2, 1,2), "k"=c(1,2, 1,2, 1,2),"l"=c(1,2, 1,2, 1,2), "s"=c(1,2, 1,2))
-
-		rt<-t(colSums(apply(rt[input$min_rp3:(input$min_rp3+length(w_rp3)-1),],2,function(x) x*w_rp3)))
-
-		if(input$rp3 == FALSE){
-			rt=NULL
-		}
-		rt
-
-	    })
-
-
- 	    output$Trp4 <- DT::renderDataTable({
-
-		inFile <- input$file1
-
-		if (is.null(inFile))
-		      return(NULL)
-		    
-		rt<-read.table(inFile$datapath, header=input$header, 
-				sep=input$sep, quote=input$quote,  row.names=1)
-
-		w_rp4=switch(input$org,"g"=c(1,1,2), "k"=c(1,1,2),"l"=c(1,1,2), "s"=c(1,1,2))
-	
-		rt<-rt[input$min_rp4:(input$min_rp4+length(w_rp4)-1),]
-
-
-
-		#Calculamos la suma Total de cada Columna
-               	#rt["TOTAL",]<-colSums(rt) #esta suma no es muy informativa
-		#Calculamos el I_rp1_org de cada muestra
-               	rt[paste("I_rp4",input$org,sep="_"),]<-t(colSums(apply(rt[1:length(w_rp4),],2,function(x) x*w_rp4)))
-		#Agregamos la suma por renglones 
-		Total<-rowSums(rt)
-		#Agregamos la media por renglones 
-		Mean<-round(apply(rt,1,mean), digits = 2)
-		#Agregamos la moda por renglones 
-		Median<-round(apply(rt,1,median), digits = 2)
-		#Agregamos la varianza por renglones 
-		Var<-round(apply(rt,1,var), digits = 2) 
-		#Agregamos la desviación estandar por renglones 
-		Sd<-round(apply(rt,1,sd), digits = 2) 
-		#Agregamos las columnas
-		rt$TOTAL=Total
-		rt$MEAN=Mean
-		rt$MEDIAN=Median
-		rt$VAR=Var
-		rt$SD=Sd
-		#Agregamos la columna de pesos
- 		rt<-cbind(W=c(w_rp4," "),rt)
-
-		if(input$rp4 == FALSE){
-			rt=NULL
-		}
-		rt
-
-	    }, options=list(  
-		initComplete = JS(
-    "function(settings, json) {",
-    "$(this.api().table().header()).css({'background-color': '#000', 'color': '#fff'});",
-    "}"		)  #close JS
-	) #close options
-)
-
-	    output$I_org_rp4 <- renderTable({
-
-		inFile <- input$file1
-
-		if (is.null(inFile))
-		      return(NULL)
-		    
-		rt<-read.table(inFile$datapath, header=input$header, 
-			sep=input$sep, quote=input$quote,  row.names=1)
-
-		#Alterations Exudate, Activation of RES, Infiltration
-		w_rp4=switch(input$org,"g"=c(1,1,2), "k"=c(1,1,2),"l"=c(1,1,2), "s"=c(1,1,2))
-
-		rt<-t(colSums(rt[input$min_rp4:(input$min_rp4+length(w_rp4)-1),]))
-
-		if(input$rp4 == FALSE){
-			rt=NULL
-		}
-		rt
-
-	    })
-
-
-
- 	    output$Trp5 <- DT::renderDataTable({
-
-		inFile <- input$file1
-
-		if (is.null(inFile))
-		      return(NULL)
-		    
-		rt<-read.table(inFile$datapath, header=input$header, 
-				sep=input$sep, quote=input$quote,  row.names=1)
-		w_rp5=switch(input$org,"g"=c(2,3), "k"=c(2,3),"l"=c(2,3), "s"=c(2,3))
-		rt<-rt[input$min_rp5:(input$min_rp5+length(w_rp5)-1),]
-
-
-
-		#Calculamos la suma Total de cada Columna
-               	#rt["TOTAL",]<-colSums(rt) #esta suma no es muy informativa
-		#Calculamos el I_rp1_org de cada muestra
-               	rt[paste("I_rp5",input$org,sep="_"),]<-t(colSums(apply(rt[1:length(w_rp5),],2,function(x) x*w_rp5)))
-		#Agregamos la suma por renglones 
-		Total<-rowSums(rt)
-		#Agregamos la media por renglones 
-		Mean<-round(apply(rt,1,mean), digits = 2)
-		#Agregamos la moda por renglones 
-		Median<-round(apply(rt,1,median), digits = 2)
-		#Agregamos la varianza por renglones 
-		Var<-round(apply(rt,1,var), digits = 2) 
-		#Agregamos la desviación estandar por renglones 
-		Sd<-round(apply(rt,1,sd), digits = 2) 
-		#Agregamos las columnas
-		rt$TOTAL=Total
-		rt$MEAN=Mean
-		rt$MEDIAN=Median
-		rt$VAR=Var
-		rt$SD=Sd
-		#Agregamos la columna de pesos
- 		rt<-cbind(W=c(w_rp5," "),rt)
-
-
-
-		if(input$rp5 == FALSE){
-			rt=NULL
-		}
-		rt
-
-	    }, options=list(  
-		initComplete = JS(
-    "function(settings, json) {",
-    "$(this.api().table().header()).css({'background-color': '#000', 'color': '#fff'});",
-    "}"		)  #close JS
-	) #close options
-)
-
-	    output$I_org_rp5 <- renderTable({
-
-		inFile <- input$file1
-
-		if (is.null(inFile))
-		      return(NULL)
-		    
-		rt<-read.table(inFile$datapath, header=input$header, 
-			sep=input$sep, quote=input$quote,  row.names=1)
-
-		#Alterations: Benign Tumor, Malignant Tumor
-		w_rp5=switch(input$org,"g"=c(2,3), "k"=c(2,3),"l"=c(2,3), "s"=c(2,3))
-		rt<-t(colSums(rt[input$min_rp5:(input$min_rp5+length(w_rp5)-1),]))
-
-		if(input$rp5 == FALSE){
-			rt=NULL
-		}
-		rt
-
-	    })
-
 
 
 	    output$description <- renderText({input$desc})
