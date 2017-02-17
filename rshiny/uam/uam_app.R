@@ -92,8 +92,8 @@ ui <- fluidPage(
       textOutput('intro'),
       strong(h3(textOutput("organ1"))),      
       tabsetPanel(
-        tabPanel('Reaction Pattern 1',DT::dataTableOutput("Org1_rp1_table"),DT::dataTableOutput("Org1_rp1_results"),plotOutput("boxplot_Org1_rp1", width = "600px")),
-        tabPanel('Reaction Pattern 2',DT::dataTableOutput("Org1_rp2_table"),DT::dataTableOutput("Org1_rp2_results"),plotOutput("boxplot_Org1_rp2", width = "600px"))
+        tabPanel('Reaction Pattern 1',DT::dataTableOutput("Org1_rp1_table"),DT::dataTableOutput("Org1_rp1_results"),plotOutput("boxplot_Org1_rp1", width = "600px"))  #,
+        #tabPanel('Reaction Pattern 2',DT::dataTableOutput("Org1_rp2_table"),DT::dataTableOutput("Org1_rp2_results"),plotOutput("boxplot_Org1_rp2", width = "600px"))
       ),#End of tabsetPanel
       
       textOutput('description')
@@ -111,7 +111,7 @@ ui <- fluidPage(
 
 server <- function(input, output) {
 
-	complete_list<-reactiveValues({
+	complete_list<-reactive({
 
 		inFile <- input$file1
 	    
@@ -149,8 +149,9 @@ server <- function(input, output) {
 
 
 
-	output$Org1_rp1_table<-DT::renderDataTable({complete_list},
-			options=list(initComplete = JS( "function(settings, json) {", "$(this.api().table().header()).css({'background-color': '#000', 'color': '#fff'});","}"))) #PRINT THE TABLE 
+	output$Org1_rp1_table<-DT::renderDataTable({
+			complete_list
+		},options=list(initComplete = JS( "function(settings, json) {", "$(this.api().table().header()).css({'background-color': '#000', 'color': '#fff'});","}"))) #PRINT THE TABLE 
   
  	#output$Org1_rp1_results<-DT::renderDataTable({complete_list[2]},
 	#		options=list(initComplete = JS( "function(settings, json) {", "$(this.api().table().header()).css({'background-color': '#000', 'color': '#fff'});","}"))) #PRINT THE TABLE 
