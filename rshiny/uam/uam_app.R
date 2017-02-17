@@ -36,34 +36,6 @@ get_all<-function(iFile,h,s,q){
 }
 
 
-### FUNCTION GET SUMMARY
-get_summary<-function(table,org,rp,w){
-  
-  W<-table[,w]
-  factors<-as.matrix(table[,1:2])
-  alt<-table[,3]
-  matrix<-table[,-c(1:4)]
-  rownames(matrix)<-alt
-  
-  #Calculamos el Indice I_org_rp (Sumatoria de los pesos de un rp para un organo determinado
-  matrix[paste("I",org,rp,sep="_"),]<-t(colSums(apply(matrix,2,function(x) x*W)))
-  
-  
-  #we calculate the summary by rows
-  rowsummary<-as.data.frame(t(apply(matrix,1,summary)))
-  #Agregamos la suma por renglones 
-  rowsummary$TOTAL<-rowSums(matrix)
-  #Agregamos la varianza por renglones 
-  rowsummary$VAR<-round(apply(matrix,1,var), digits = 2)
-  #Agregamos la desviación estandar por renglones 
-  rowsummary$SD<-round(apply(matrix,1,sd), digits = 2)
-  ALT<-c(as.vector(alt),paste("I",org,rp,sep="_"))
-  W<-c(W,0)
-  matrix<-cbind(W,rowsummary)
-  
-  return(matrix)
-  
-}
 
 
 
@@ -92,8 +64,11 @@ ui <- fluidPage(
       textOutput('intro'),
       strong(h3(textOutput("organ1"))),      
       tabsetPanel(
-        tabPanel('Reaction Pattern 1',DT::dataTableOutput("Org1_rp1_table"),DT::dataTableOutput("Org1_rp1_results"),plotOutput("boxplot_Org1_rp1", width = "600px"))  #,
-        #tabPanel('Reaction Pattern 2',DT::dataTableOutput("Org1_rp2_table"),DT::dataTableOutput("Org1_rp2_results"),plotOutput("boxplot_Org1_rp2", width = "600px"))
+        tabPanel('Reaction Pattern 1',DT::dataTableOutput("Org1_rp1_table"),DT::dataTableOutput("Org1_rp1_results"),plotOutput("boxplot_Org1_rp1", width = "600px")),
+        tabPanel('Reaction Pattern 2',DT::dataTableOutput("Org1_rp2_table"),DT::dataTableOutput("Org1_rp2_results"),plotOutput("boxplot_Org1_rp2", width = "600px")),
+        tabPanel('Reaction Pattern 3',DT::dataTableOutput("Org1_rp3_table"),DT::dataTableOutput("Org1_rp3_results"),plotOutput("boxplot_Org1_rp3", width = "600px")),
+        tabPanel('Reaction Pattern 4',DT::dataTableOutput("Org1_rp4_table"),DT::dataTableOutput("Org1_rp4_results"),plotOutput("boxplot_Org1_rp4", width = "600px")),
+        tabPanel('Reaction Pattern 5',DT::dataTableOutput("Org1_rp5_table"),DT::dataTableOutput("Org1_rp5_results"),plotOutput("boxplot_Org1_rp5", width = "600px"))
       ),#End of tabsetPanel
       
       textOutput('description')
@@ -111,55 +86,108 @@ ui <- fluidPage(
 
 server <- function(input, output) {
 
-	complete_list<-reactive({
-
+	iMatrix<-reactive({
 		inFile <- input$file1
-	    
 		if (is.null(inFile))
 			return(NULL)  
 
-
 		iTable<-read.table(inFile$datapath, header=input$header,sep=input$sep, quote=input$quote)
-
-		factor1<-unique(iTable[,1]) #Organs
-		factor2<-unique(iTable[,2]) #RPs
-	
-		listM<-as.list();
-		listR<-as.list();
-		listP<-as.list();
-
-		for(i in 1:length(factor1)){
-			organ<-as.character(factor1[i]) #GET THE ORGAN NAME
-			for(j in 1:length(factor2)){
-	    			matrix<-iTable[which(iTable[,1]==factor1[i] & iTable[,2]==factor2[j]),] #GET THE SUB MATRIX
-				results<-DT::renderDataTable({get_summary(matrix,factor1[i],factor2[j],4)},
-					options=list(initComplete = JS( "function(settings, json) {", "$(this.api().table().header()).css({'background-color': '#000', 'color': '#fff'});","}"))) #PRINT THE RESULTS
-				boxplot<- reactivePlot(function() { get_plot(matrix)}) #PRINT THE BOXPLOT
-			}
-	
-			listM<-c(listM,matrix)
-			listR<-c(listR,results)
-			listP<-c(listP,boxplot)
-		
-		}
-
-		return(listM[1])
+		return(iTable)
 
 	})
 
+		
+	
+	get_matrix<-function(f1,f2){
+		iTable<-iMatrix()
+		factor1<-unique(iTable[,1]) #Organs
+		factor2<-unique(iTable[,2]) #RPs
+		matrix<-iTable[which(iTable[,1]==factor1[f1] & iTable[,2]==factor2[f2]),]
+		matrix
+	}
 
 
-	output$Org1_rp1_table<-DT::renderDataTable({
-			complete_list
+	get_organ<-function(f1){
+		iTable<-iMatrix()
+		organs<-unique(iTable[,1])
+		return(as.character(organs[f1]))    
+	}
+
+	### FUNCTION GET SUMMARY
+	get_summary<-function(org,rp,w){
+
+		iTable<-iMatrix()
+
+		factor1<-unique(iTable[,1]) #Organs
+		factor2<-unique(iTable[,2]) #RPs
+		mat<-iTable[which(iTable[,1]==factor1[org] & iTable[,2]==factor2[rp]),]
+		W<-mat[,w]
+		alt<-mat[,3]
+		mat<-mat[,-c(1:4)]
+		mat<-mat[1:10,]
+
+		#rownames(matrix)<-alt
+		
+		#Calculamos el Indice I_org_rp (Sumatoria de los pesos de un rp para un organo determinado
+		#matrix[paste("I",org,rp,sep="_"),]<-t(colSums(apply(matrix,2,function(x){x*W})))
+		#matrix["mean",]<-t(apply(X=matrix,MARGIN=2,FUN=mean))
+#
+		#matrix[,"dim"]=dim(matrix)
+		
+		
+		#we calculate the summary by rows
+		#rowsummary<-as.data.frame(t(apply(matrix,1,summary)))
+		#Agregamos la suma por renglones 
+		#rowsummary$TOTAL<-rowSums(matrix)
+		#Agregamos la varianza por renglones 
+		#rowsummary$VAR<-round(apply(matrix,1,var), digits = 2)
+		#Agregamos la desviación estandar por renglones 
+		#rowsummary$SD<-round(apply(matrix,1,sd), digits = 2)
+		#ALT<-c(as.vector(alt),paste("I",org,rp,sep="_"))
+		#W<-c(W,0)
+		#matrix<-cbind(W,rowsummary)
+		
+		return(mat)
+		
+	}
+
+
+#ORGAN 1 TABLES
+	output$Org1_rp1_table<-DT::renderDataTable({get_matrix(1,1)		
 		},options=list(initComplete = JS( "function(settings, json) {", "$(this.api().table().header()).css({'background-color': '#000', 'color': '#fff'});","}"))) #PRINT THE TABLE 
-  
- 	#output$Org1_rp1_results<-DT::renderDataTable({complete_list[2]},
-	#		options=list(initComplete = JS( "function(settings, json) {", "$(this.api().table().header()).css({'background-color': '#000', 'color': '#fff'});","}"))) #PRINT THE TABLE 
-  
-	#output$boxplot_Org1_rp1<-reactivePlot(function() {complete_list[3]}) #PRINT THE TABLE 
+
+	output$Org1_rp2_table<-DT::renderDataTable({get_matrix(1,2)		
+		},options=list(initComplete = JS( "function(settings, json) {", "$(this.api().table().header()).css({'background-color': '#000', 'color': '#fff'});","}"))) #PRINT THE TABLE 
+
+	output$Org1_rp3_table<-DT::renderDataTable({get_matrix(1,3)		
+		},options=list(initComplete = JS( "function(settings, json) {", "$(this.api().table().header()).css({'background-color': '#000', 'color': '#fff'});","}"))) #PRINT THE TABLE 
+
+	output$Org1_rp4_table<-DT::renderDataTable({get_matrix(1,4)		
+		},options=list(initComplete = JS( "function(settings, json) {", "$(this.api().table().header()).css({'background-color': '#000', 'color': '#fff'});","}"))) #PRINT THE TABLE 
+
+	output$Org1_rp5_table<-DT::renderDataTable({get_matrix(1,5)		
+		},options=list(initComplete = JS( "function(settings, json) {", "$(this.api().table().header()).css({'background-color': '#000', 'color': '#fff'});","}"))) #PRINT THE TABLE 
+
+
+#ORGAN 1 SUMMARY
+	#output$Org1_rp1_results<-DT::renderDataTable({get_summary(1,1,4)},
+	#	options=list(initComplete = JS( "function(settings, json) {", "$(this.api().table().header()).css({'background-color': '#000', 'color': '#fff'});","}"))) #PRINT THE SUMMARY 
+
+	#output$Org1_rp2_results<-DT::renderDataTable({get_summary(1,2,4)		
+	#	},options=list(initComplete = JS( "function(settings, json) {", "$(this.api().table().header()).css({'background-color': '#000', 'color': '#fff'});","}"))) #PRINT THE SUMMARY 
+
+	#output$Org1_rp3_results<-DT::renderDataTable({get_summary(1,3,4)		
+	#	},options=list(initComplete = JS( "function(settings, json) {", "$(this.api().table().header()).css({'background-color': '#000', 'color': '#fff'});","}"))) #PRINT THE SUMMARY 
+
+	#output$Org1_rp4_results<-DT::renderDataTable({get_summary(1,4,4)		
+	#	},options=list(initComplete = JS( "function(settings, json) {", "$(this.api().table().header()).css({'background-color': '#000', 'color': '#fff'});","}"))) #PRINT THE SUMMARY 
+
+	#output$Org1_rp5_results<-DT::renderDataTable({get_summary(1,5,4)		
+	#	},options=list(initComplete = JS( "function(settings, json) {", "$(this.api().table().header()).css({'background-color': '#000', 'color': '#fff'});","}"))) #PRINT THE SUMMARY   
+
      
-  
-	output$description <- renderText({input$desc})
+	output$description <- renderText({get_summary(1,1,4)})
+	#output$description <- renderText({input$desc})
 	output$intro <- renderText({"This is are the tables of reacction paterns"})
 
   

@@ -1,27 +1,5 @@
 
 
-	output$boxplot1 <- reactivePlot(function() {
-	     # check for the input variable
-
-
-		w_rp1=switch(input$org,"g"=c(1,1), "k"=c(1,1),"l"=c(1,1), "s"=c(1,1))
-		inFile <- input$file1
-
-		if (is.null(inFile))
-			return(NULL)
-
-		rt<-read.table(inFile$datapath, header=input$header,sep=input$sep, quote=input$quote)
-		rt<-rt[input$min_rp1:(input$min_rp1+length(w_rp1)-1),]
-		alt<-rownames(rt)
-		samp<-colnames(rt)
-		rt<-as.vector(unlist(c(rt))) #convert to a vector
-		fac<-rep(alt,length(samp))
-		df<-data.frame(value=rt,fac)
-		p <- ggplot(df, aes(as.factor(fac), value)) + 
-			geom_boxplot(outlier.size = 1.5) + 
-			xlab(colnames(rt))
-		print(p)
-	})
 
 
 
@@ -78,30 +56,8 @@
     "}"		)  #close JS
 	) #close options
 )
-	output$boxplot2 <- reactivePlot(function() {
-	     # check for the input variable
 
 
-		w_rp2=switch(input$org,"g"=c(1,1,1,2,2,3, 1,1,1,2,2,3), "k"=c(1,1,1,2,2,3, 1,1,1,2,2,3, 1,
-1, 1, 2, 2, 3),"l"=c(1,1,1,2,2,3, 1,1,1,2,2,3, 1,1,1,2,2,3), "s"=c(1,1,1,2,2,3, 2, 1,1,1,2,2,3))
-		inFile <- input$file1
-
-
-		if (is.null(inFile))
-		      return(NULL)
-
-		rt<-read.table(inFile$datapath, header=input$header,sep=input$sep, quote=input$quote, row.names=1)
-		rt<-rt[input$min_rp2:(input$min_rp2+length(w_rp2)-1),]
-		alt<-rownames(rt)
-		samp<-colnames(rt)
-		rt<-as.vector(unlist(c(rt))) #convert to a vector
-		fac<-rep(alt,length(samp))
-		df<-data.frame(value=rt,fac)
-		p <- ggplot(df, aes(as.factor(fac), value)) + 
-			geom_boxplot(outlier.size = 1.5) + 
-			xlab(colnames(rt))
-		print(p)
-	})
 	     
 
 	    output$Trp3 <- DT::renderDataTable({
