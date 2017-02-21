@@ -60,7 +60,14 @@ ui <- fluidPage(
         tabPanel('Reaction Pattern 5',DT::dataTableOutput("Org1_rp5_table"),DT::dataTableOutput("Org1_rp5_results"),plotOutput("boxplot_Org1_rp5", width = "600px"))
       ),#End of tabsetPanel
 
-
+      strong(h3(textOutput("organ2"))),      
+      tabsetPanel(
+        tabPanel('Reaction Pattern 1',DT::dataTableOutput("Org2_rp1_table"),DT::dataTableOutput("Org2_rp1_results"),plotOutput("boxplot_Org2_rp1", width = "600px")),
+        tabPanel('Reaction Pattern 2',DT::dataTableOutput("Org2_rp2_table"),DT::dataTableOutput("Org2_rp2_results"),plotOutput("boxplot_Org2_rp2", width = "600px")),
+        tabPanel('Reaction Pattern 3',DT::dataTableOutput("Org2_rp3_table"),DT::dataTableOutput("Org2_rp3_results"),plotOutput("boxplot_Org2_rp3", width = "600px")),
+        tabPanel('Reaction Pattern 4',DT::dataTableOutput("Org2_rp4_table"),DT::dataTableOutput("Org2_rp4_results"),plotOutput("boxplot_Org2_rp4", width = "600px")),
+        tabPanel('Reaction Pattern 5',DT::dataTableOutput("Org2_rp5_table"),DT::dataTableOutput("Org2_rp5_results"),plotOutput("boxplot_Org2_rp5", width = "600px"))
+      ),#End of tabsetPanel
 
       
       textOutput('description')
@@ -159,12 +166,8 @@ server <- function(input, output) {
 	}
 
 
-#ORGANS
+#ORGAN 1
 	output$organ1<-renderText({get_organ(1)})
-	#output$organ2<-renderText({get_organ(2)})
-	#output$organ3<-renderText({get_organ(3)})
-	#output$organ4<-renderText({get_organ(4)})
-	#output$organ5<-renderText({get_organ(5)})
 
 
 #ORGAN 1 TABLES
@@ -200,11 +203,56 @@ server <- function(input, output) {
 	output$Org1_rp5_results<-DT::renderDataTable({get_summary(1,5,4)		
 		},options=list(initComplete = JS( "function(settings, json) {", "$(this.api().table().header()).css({'background-color': '#000', 'color': '#fff'});","}"))) #PRINT THE SUMMARY   
 
+#ORGAN 1 BOXPLOTS
      	output$boxplot_Org1_rp1 <- reactivePlot(function() { get_plot(1,1) })
      	output$boxplot_Org1_rp2 <- reactivePlot(function() { get_plot(1,2) })
      	output$boxplot_Org1_rp3 <- reactivePlot(function() { get_plot(1,3) })
      	output$boxplot_Org1_rp4 <- reactivePlot(function() { get_plot(1,4) })
      	output$boxplot_Org1_rp5 <- reactivePlot(function() { get_plot(1,5) })
+
+
+#ORGAN 2
+	output$organ2<-renderText({get_organ(2)})
+
+
+#ORGAN 2 TABLES
+	output$Org2_rp1_table<-DT::renderDataTable({get_matrix(2,1,4)		
+		},options=list(initComplete = JS( "function(settings, json) {", "$(this.api().table().header()).css({'background-color': '#000', 'color': '#fff'});","}"))) #PRINT THE TABLE 
+
+	output$Org2_rp2_table<-DT::renderDataTable({get_matrix(2,2,4)		
+		},options=list(initComplete = JS( "function(settings, json) {", "$(this.api().table().header()).css({'background-color': '#000', 'color': '#fff'});","}"))) #PRINT THE TABLE 
+
+	output$Org2_rp3_table<-DT::renderDataTable({get_matrix(2,3,4)		
+		},options=list(initComplete = JS( "function(settings, json) {", "$(this.api().table().header()).css({'background-color': '#000', 'color': '#fff'});","}"))) #PRINT THE TABLE 
+
+	output$Org2_rp4_table<-DT::renderDataTable({get_matrix(2,4,4)		
+		},options=list(initComplete = JS( "function(settings, json) {", "$(this.api().table().header()).css({'background-color': '#000', 'color': '#fff'});","}"))) #PRINT THE TABLE 
+
+	output$Org2_rp5_table<-DT::renderDataTable({get_matrix(2,5,4)		
+		},options=list(initComplete = JS( "function(settings, json) {", "$(this.api().table().header()).css({'background-color': '#000', 'color': '#fff'});","}"))) #PRINT THE TABLE 
+
+
+#ORGAN 2 SUMMARY
+	output$Org2_rp1_results<-DT::renderDataTable({get_summary(2,1,4)},
+		options=list(initComplete = JS( "function(settings, json) {", "$(this.api().table().header()).css({'background-color': '#000', 'color': '#fff'});","}"))) #PRINT THE SUMMARY 
+
+	output$Org2_rp2_results<-DT::renderDataTable({get_summary(2,2,4)		
+		},options=list(initComplete = JS( "function(settings, json) {", "$(this.api().table().header()).css({'background-color': '#000', 'color': '#fff'});","}"))) #PRINT THE SUMMARY 
+
+	output$Org2_rp3_results<-DT::renderDataTable({get_summary(2,3,4)		
+		},options=list(initComplete = JS( "function(settings, json) {", "$(this.api().table().header()).css({'background-color': '#000', 'color': '#fff'});","}"))) #PRINT THE SUMMARY 
+
+	output$Org2_rp4_results<-DT::renderDataTable({get_summary(2,4,4)		
+		},options=list(initComplete = JS( "function(settings, json) {", "$(this.api().table().header()).css({'background-color': '#000', 'color': '#fff'});","}"))) #PRINT THE SUMMARY 
+
+	output$Org2_rp5_results<-DT::renderDataTable({get_summary(2,5,4)		
+		},options=list(initComplete = JS( "function(settings, json) {", "$(this.api().table().header()).css({'background-color': '#000', 'color': '#fff'});","}"))) #PRINT THE SUMMARY   
+
+	output$organ3<-renderText({get_organ(3)})
+	output$organ4<-renderText({get_organ(4)})
+	output$organ5<-renderText({get_organ(5)})
+
+
 
 	#output$description <- renderText({get_summary(1,1,4)})
 	output$description <- renderText({input$desc})
