@@ -92,16 +92,17 @@ ui <- fluidPage(
 
 
 
-      strong(h3(textOutput("organ5"))),      
+      strong(h3(textOutput("Results"))),      
       tabsetPanel(
-        tabPanel('Reaction Pattern 1',DT::dataTableOutput("Org5_rp1_table"),DT::dataTableOutput("Org5_rp1_results"),plotOutput("boxplot_Org5_rp1", width = "600px")),
-        tabPanel('Reaction Pattern 2',DT::dataTableOutput("Org5_rp2_table"),DT::dataTableOutput("Org5_rp2_results"),plotOutput("boxplot_Org5_rp2", width = "600px")),
-        tabPanel('Reaction Pattern 3',DT::dataTableOutput("Org5_rp3_table"),DT::dataTableOutput("Org5_rp3_results"),plotOutput("boxplot_Org5_rp3", width = "600px")),
-        tabPanel('Reaction Pattern 4',DT::dataTableOutput("Org5_rp4_table"),DT::dataTableOutput("Org5_rp4_results"),plotOutput("boxplot_Org5_rp4", width = "600px")),
-        tabPanel('Reaction Pattern 5',DT::dataTableOutput("Org5_rp5_table"),DT::dataTableOutput("Org5_rp5_results"),plotOutput("boxplot_Org5_rp5", width = "600px"))
+        tabPanel('Total Index',DT::dataTableOutput("I_T_results")),
+        tabPanel('Rection Pattern Index',DT::dataTableOutput("I_rp1_results"),DT::dataTableOutput("I_rp2_results"),DT::dataTableOutput("I_rp3_results"),DT::dataTableOutput("I_rp4_results"),DT::dataTableOutput("I_rp5_results"))
       ),#End of tabsetPanel
 
       
+
+
+
+
       textOutput('description')
       
     ) #End of mainPanel
@@ -167,7 +168,7 @@ server <- function(input, output) {
 		mat<-matrix[,-c(1:4)]
 		mat[paste("I",factor1[org],sep="_"),]<-apply(apply(mat,2,function(x){ x*W}),2,sum)
 		#rbind(matrix,)
-		return(mat)
+		return(mat[paste("I",factor1[org],sep="_"),])
 		
 	}
 
@@ -178,14 +179,14 @@ server <- function(input, output) {
 			return(NULL)  
 
 		iTable<-iMatrix()
-		factor1<-unique(iTable[,1]) #Organs
-		matrix<-iTable[which(iTable[,1]==factor2[rp]),]
+		factor2<-unique(iTable[,2]) #rp
+		matrix<-iTable[which(iTable[,2]==factor2[rp]),]
 		W<-matrix[,w]
 		
 		mat<-matrix[,-c(1:4)]
-		mat[paste("I",factor1[org],sep="_"),]<-apply(apply(mat,2,function(x){ x*W}),2,sum)
+		mat[paste("I",factor2[rp],sep="_"),]<-apply(apply(mat,2,function(x){ x*W}),2,sum)
 		#rbind(matrix,)
-		return(mat)
+		return(mat[paste("I",factor2[rp],sep="_"),])
 		
 	}
 
@@ -204,7 +205,7 @@ server <- function(input, output) {
 		mat<-matrix[,-c(1:4)]
 		mat["I_Tot",]<-apply(apply(mat,2,function(x){ x*W}),2,sum)
 		#rbind(matrix,)
-		return(mat)
+		return(mat["I_Tot",])
 		
 	}
 
@@ -319,11 +320,7 @@ server <- function(input, output) {
 
 
 	output$Org1_I_table<-DT::renderDataTable({get_I_org(1,4)},
-		options=list(initComplete = JS( "function(settings, json) {", "$(this.api().table().header()).css({'background-color': '#000', 'color': '#fff'});","}"))) #PRINT THE SUMMARY   
-
-
-
-
+		options=list(initComplete = JS( "function(settings, json) {", "$(this.api().table().header()).css({'background-color': '#000', 'color': '#fff'});","}"))) # Print the I_Organ
 
 
 
@@ -373,6 +370,11 @@ server <- function(input, output) {
      	output$boxplot_Org2_rp4 <- reactivePlot(function() { get_plot(2,4) })
      	output$boxplot_Org2_rp5 <- reactivePlot(function() { get_plot(2,5) })
 
+### Organ 2 Results
+
+	output$Org2_I_table<-DT::renderDataTable({get_I_org(2,4)},
+		options=list(initComplete = JS( "function(settings, json) {", "$(this.api().table().header()).css({'background-color': '#000', 'color': '#fff'});","}"))) # Print the I_Organ
+
 
 #ORGAN 3
 	output$organ3<-renderText({get_organ(3)})
@@ -419,6 +421,10 @@ server <- function(input, output) {
      	output$boxplot_Org3_rp4 <- reactivePlot(function() { get_plot(3,4) })
      	output$boxplot_Org3_rp5 <- reactivePlot(function() { get_plot(3,5) })
 
+### Organ 3 Results
+
+	output$Org3_I_table<-DT::renderDataTable({get_I_org(3,4)},
+		options=list(initComplete = JS( "function(settings, json) {", "$(this.api().table().header()).css({'background-color': '#000', 'color': '#fff'});","}"))) # Print the I_Organ
 
 #ORGAN 4
 	output$organ4<-renderText({get_organ(4)})
@@ -465,6 +471,10 @@ server <- function(input, output) {
      	output$boxplot_Org4_rp4 <- reactivePlot(function() { get_plot(4,4) })
      	output$boxplot_Org4_rp5 <- reactivePlot(function() { get_plot(4,5) })
 
+### Organ 3 Results
+
+	output$Org4_I_table<-DT::renderDataTable({get_I_org(4,4)},
+		options=list(initComplete = JS( "function(settings, json) {", "$(this.api().table().header()).css({'background-color': '#000', 'color': '#fff'});","}"))) # Print the I_Organ
 
 
 #ORGAN 5
@@ -512,7 +522,33 @@ server <- function(input, output) {
   #   	output$boxplot_Org5_rp4 <- reactivePlot(function() { get_plot(5,4) })
   #   	output$boxplot_Org5_rp5 <- reactivePlot(function() { get_plot(5,5) })
 #
-	#output$description <- renderText({get_summary(1,1,4)})
+
+
+
+#RESULTS BY RPs
+
+	output$I_rp1_results<-DT::renderDataTable({get_I_rp(1,4)}
+		,options=list(initComplete = JS( "function(settings, json) {", "$(this.api().table().header()).css({'background-color': '#000', 'color': '#fff'});","}"))) #PRINT THE SUMMARY   
+
+	output$I_rp2_results<-DT::renderDataTable({get_I_rp(2,4)}
+		,options=list(initComplete = JS( "function(settings, json) {", "$(this.api().table().header()).css({'background-color': '#000', 'color': '#fff'});","}"))) #PRINT THE SUMMARY 
+
+	output$I_rp3_results<-DT::renderDataTable({get_I_rp(3,4)}
+		,options=list(initComplete = JS( "function(settings, json) {", "$(this.api().table().header()).css({'background-color': '#000', 'color': '#fff'});","}"))) #PRINT THE SUMMARY 
+
+	output$I_rp4_results<-DT::renderDataTable({get_I_rp(4,4)}
+		,options=list(initComplete = JS( "function(settings, json) {", "$(this.api().table().header()).css({'background-color': '#000', 'color': '#fff'});","}"))) #PRINT THE SUMMARY 
+
+
+	output$I_rp5_results<-DT::renderDataTable({get_I_rp(5,4)}
+		,options=list(initComplete = JS( "function(settings, json) {", "$(this.api().table().header()).css({'background-color': '#000', 'color': '#fff'});","}"))) #PRINT THE SUMMARY 
+
+
+#RESULT I_TOTAL
+	output$I_T_results<-DT::renderDataTable({get_I_Tot(4)}
+		,options=list(initComplete = JS( "function(settings, json) {", "$(this.api().table().header()).css({'background-color': '#000', 'color': '#fff'});","}"))) #PRINT THE SUMMARY 
+
+
 	output$description <- renderText({input$desc})
 	output$intro <- renderText({"This is are the tables of reacction paterns"})
 
