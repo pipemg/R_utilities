@@ -1,5 +1,46 @@
 
 
+     strong(h3(textOutput("organ2"))),      
+      tabsetPanel(
+        tabPanel('Reaction Pattern 1',DT::dataTableOutput("Org2_rp1_table"),DT::dataTableOutput("Org2_rp1_results"),plotOutput("boxplot_Org2_rp1", width = "600px")),
+        tabPanel('Reaction Pattern 2',DT::dataTableOutput("Org2_rp2_table"),DT::dataTableOutput("Org2_rp2_results"),plotOutput("boxplot_Org2_rp2", width = "600px")),
+        tabPanel('Reaction Pattern 3',DT::dataTableOutput("Org2_rp3_table"),DT::dataTableOutput("Org2_rp3_results"),plotOutput("boxplot_Org2_rp3", width = "600px")),
+        tabPanel('Reaction Pattern 4',DT::dataTableOutput("Org2_rp4_table"),DT::dataTableOutput("Org2_rp4_results"),plotOutput("boxplot_Org2_rp4", width = "600px")),
+        tabPanel('Reaction Pattern 5',DT::dataTableOutput("Org2_rp5_table"),DT::dataTableOutput("Org2_rp5_results"),plotOutput("boxplot_Org2_rp5", width = "600px"))
+      ),#End of tabsetPanel
+
+
+     strong(h3(textOutput("organ3"))),      
+      tabsetPanel(
+        tabPanel('Reaction Pattern 1',DT::dataTableOutput("Org3_rp1_table"),DT::dataTableOutput("Org3_rp1_results"),plotOutput("boxplot_Org3_rp1", width = "600px")),
+        tabPanel('Reaction Pattern 2',DT::dataTableOutput("Org3_rp2_table"),DT::dataTableOutput("Org3_rp2_results"),plotOutput("boxplot_Org3_rp2", width = "600px")),
+        tabPanel('Reaction Pattern 3',DT::dataTableOutput("Org3_rp3_table"),DT::dataTableOutput("Org3_rp3_results"),plotOutput("boxplot_Org3_rp3", width = "600px")),
+        tabPanel('Reaction Pattern 4',DT::dataTableOutput("Org3_rp4_table"),DT::dataTableOutput("Org3_rp4_results"),plotOutput("boxplot_Org3_rp4", width = "600px")),
+        tabPanel('Reaction Pattern 5',DT::dataTableOutput("Org3_rp5_table"),DT::dataTableOutput("Org3_rp5_results"),plotOutput("boxplot_Org3_rp5", width = "600px"))
+      ),#End of tabsetPanel
+
+     strong(h3(textOutput("organ4"))),      
+      tabsetPanel(
+        tabPanel('Reaction Pattern 1',DT::dataTableOutput("Org4_rp1_table"),DT::dataTableOutput("Org4_rp1_results"),plotOutput("boxplot_Org4_rp1", width = "600px")),
+        tabPanel('Reaction Pattern 2',DT::dataTableOutput("Org4_rp2_table"),DT::dataTableOutput("Org4_rp2_results"),plotOutput("boxplot_Org4_rp2", width = "600px")),
+        tabPanel('Reaction Pattern 3',DT::dataTableOutput("Org4_rp3_table"),DT::dataTableOutput("Org4_rp3_results"),plotOutput("boxplot_Org4_rp3", width = "600px")),
+        tabPanel('Reaction Pattern 4',DT::dataTableOutput("Org4_rp4_table"),DT::dataTableOutput("Org4_rp4_results"),plotOutput("boxplot_Org4_rp4", width = "600px")),
+        tabPanel('Reaction Pattern 5',DT::dataTableOutput("Org4_rp5_table"),DT::dataTableOutput("Org4_rp5_results"),plotOutput("boxplot_Org4_rp5", width = "600px"))
+      ),#End of tabsetPanel
+
+
+     strong(h3(textOutput("organ5"))),      
+      tabsetPanel(
+        tabPanel('Reaction Pattern 1',DT::dataTableOutput("Org5_rp1_table"),DT::dataTableOutput("Org5_rp1_results"),plotOutput("boxplot_Org5_rp1", width = "600px")),
+        tabPanel('Reaction Pattern 2',DT::dataTableOutput("Org5_rp2_table"),DT::dataTableOutput("Org5_rp2_results"),plotOutput("boxplot_Org5_rp2", width = "600px")),
+        tabPanel('Reaction Pattern 3',DT::dataTableOutput("Org5_rp3_table"),DT::dataTableOutput("Org5_rp3_results"),plotOutput("boxplot_Org5_rp3", width = "600px")),
+        tabPanel('Reaction Pattern 4',DT::dataTableOutput("Org5_rp4_table"),DT::dataTableOutput("Org5_rp4_results"),plotOutput("boxplot_Org5_rp4", width = "600px")),
+        tabPanel('Reaction Pattern 5',DT::dataTableOutput("Org5_rp5_table"),DT::dataTableOutput("Org5_rp5_results"),plotOutput("boxplot_Org5_rp5", width = "600px"))
+      ),#End of tabsetPanel
+
+
+
+
 
 
 
