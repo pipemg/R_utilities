@@ -58,7 +58,7 @@ ui <- fluidPage(
         tabPanel('Reaction Pattern 3',DT::dataTableOutput("Org1_rp3_table"),DT::dataTableOutput("Org1_rp3_results"),plotOutput("boxplot_Org1_rp3", width = "600px")),
         tabPanel('Reaction Pattern 4',DT::dataTableOutput("Org1_rp4_table"),DT::dataTableOutput("Org1_rp4_results"),plotOutput("boxplot_Org1_rp4", width = "600px")),
         tabPanel('Reaction Pattern 5',DT::dataTableOutput("Org1_rp5_table"),DT::dataTableOutput("Org1_rp5_results"),plotOutput("boxplot_Org1_rp5", width = "600px")),
-         tabPanel('Results',DT::dataTableOutput("Org1_I_table"))
+        tabPanel('Results',DT::dataTableOutput("Org1_I_table"))
       ),#End of tabsetPanel
 
       strong(h3(textOutput("organ2"))),      
@@ -67,7 +67,8 @@ ui <- fluidPage(
         tabPanel('Reaction Pattern 2',DT::dataTableOutput("Org2_rp2_table"),DT::dataTableOutput("Org2_rp2_results"),plotOutput("boxplot_Org2_rp2", width = "600px")),
         tabPanel('Reaction Pattern 3',DT::dataTableOutput("Org2_rp3_table"),DT::dataTableOutput("Org2_rp3_results"),plotOutput("boxplot_Org2_rp3", width = "600px")),
         tabPanel('Reaction Pattern 4',DT::dataTableOutput("Org2_rp4_table"),DT::dataTableOutput("Org2_rp4_results"),plotOutput("boxplot_Org2_rp4", width = "600px")),
-        tabPanel('Reaction Pattern 5',DT::dataTableOutput("Org2_rp5_table"),DT::dataTableOutput("Org2_rp5_results"),plotOutput("boxplot_Org2_rp5", width = "600px"))
+        tabPanel('Reaction Pattern 5',DT::dataTableOutput("Org2_rp5_table"),DT::dataTableOutput("Org2_rp5_results"),plotOutput("boxplot_Org2_rp5", width = "600px")),
+        tabPanel('Results',DT::dataTableOutput("Org2_I_table"))
       ),#End of tabsetPanel
 
 
@@ -77,7 +78,8 @@ ui <- fluidPage(
         tabPanel('Reaction Pattern 2',DT::dataTableOutput("Org3_rp2_table"),DT::dataTableOutput("Org3_rp2_results"),plotOutput("boxplot_Org3_rp2", width = "600px")),
         tabPanel('Reaction Pattern 3',DT::dataTableOutput("Org3_rp3_table"),DT::dataTableOutput("Org3_rp3_results"),plotOutput("boxplot_Org3_rp3", width = "600px")),
         tabPanel('Reaction Pattern 4',DT::dataTableOutput("Org3_rp4_table"),DT::dataTableOutput("Org3_rp4_results"),plotOutput("boxplot_Org3_rp4", width = "600px")),
-        tabPanel('Reaction Pattern 5',DT::dataTableOutput("Org3_rp5_table"),DT::dataTableOutput("Org3_rp5_results"),plotOutput("boxplot_Org3_rp5", width = "600px"))
+        tabPanel('Reaction Pattern 5',DT::dataTableOutput("Org3_rp5_table"),DT::dataTableOutput("Org3_rp5_results"),plotOutput("boxplot_Org3_rp5", width = "600px")),
+        tabPanel('Results',DT::dataTableOutput("Org3_I_table"))
       ),#End of tabsetPanel
 
 
@@ -87,7 +89,8 @@ ui <- fluidPage(
         tabPanel('Reaction Pattern 2',DT::dataTableOutput("Org4_rp2_table"),DT::dataTableOutput("Org4_rp2_results"),plotOutput("boxplot_Org4_rp2", width = "600px")),
         tabPanel('Reaction Pattern 3',DT::dataTableOutput("Org4_rp3_table"),DT::dataTableOutput("Org4_rp3_results"),plotOutput("boxplot_Org4_rp3", width = "600px")),
         tabPanel('Reaction Pattern 4',DT::dataTableOutput("Org4_rp4_table"),DT::dataTableOutput("Org4_rp4_results"),plotOutput("boxplot_Org4_rp4", width = "600px")),
-        tabPanel('Reaction Pattern 5',DT::dataTableOutput("Org4_rp5_table"),DT::dataTableOutput("Org4_rp5_results"),plotOutput("boxplot_Org4_rp5", width = "600px"))
+        tabPanel('Reaction Pattern 5',DT::dataTableOutput("Org4_rp5_table"),DT::dataTableOutput("Org4_rp5_results"),plotOutput("boxplot_Org4_rp5", width = "600px")),
+        tabPanel('Results',DT::dataTableOutput("Org4_I_table"))
       ),#End of tabsetPanel
 
 
@@ -471,7 +474,7 @@ server <- function(input, output) {
      	output$boxplot_Org4_rp4 <- reactivePlot(function() { get_plot(4,4) })
      	output$boxplot_Org4_rp5 <- reactivePlot(function() { get_plot(4,5) })
 
-### Organ 3 Results
+### Organ 4 Results
 
 	output$Org4_I_table<-DT::renderDataTable({get_I_org(4,4)},
 		options=list(initComplete = JS( "function(settings, json) {", "$(this.api().table().header()).css({'background-color': '#000', 'color': '#fff'});","}"))) # Print the I_Organ
