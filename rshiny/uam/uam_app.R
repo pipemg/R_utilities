@@ -115,7 +115,7 @@ server <- function(input, output) {
 		mat<-iTable[which(iTable[,1]==factor1[org] & iTable[,2]==factor2[rp]),]
 
 		vector<-as.vector(unlist(c(mat[,-c(1:4)]))) #convert to a vector
-		Alt<-rep(mat[,3],length(mat[,3]))
+		Alt<-rep(mat[,3],ncol(mat[,-c(1:4)]))
 		df<-data.frame(vector,Alt)
 
 		p <- ggplot(df, aes(as.factor(Alt), vector,  fill=Alt)) + 
@@ -144,7 +144,7 @@ server <- function(input, output) {
 		alt<-mat[,3]
 		mat<-mat[,-c(1:4)]
 
-		rowsummary<-as.data.frame(unlist(apply(as.data.frame(mat),1,summary)))
+		rowsummary<-apply(as.data.frame(mat),1,summary)
 				
 		mat<-data.frame(as.vector(mat))
 		TOTAL<-as.vector(round(apply(mat,1,sum), digits = 3))
