@@ -1,0 +1,143 @@
+ORGAN	RP	ALT	W	M1	M2	M3	M4	M5	M6	M7	M8	M9	M10
+#Circulatory_disturbances													
+gills	rp1	haem_hyper_aneu	1	4.2	2.2	2.6	5.01	5.1	4.78	3.65	3.84	3.17	4.4
+gills	rp1	inter_oedema	1	1.2	2.2	2.8	5.61	3.13	5.7	3.9	3.71	4.98	3.35
+#Regressive_changes:Epithelium													
+gills	rp2	architec_alt	1	1.9	2.6	3	2.24	5.08	4.81	3.4	1.56	3.64	4.25
+gills	rp2	plasma_alt	1	0.5	1.5	0.6	2.46	5.07	5.34	3.37	6	3.61	4.33
+gills	rp2	deposits	1	1.5	1.5	2.2	4.57	4.13	3.25	6	3.82	3.63	3.18
+gills	rp2	nuclear_alt	2	1.6	1.6	1.5	5.19	3.07	2.39	5.74	3.14	4.67	2.03
+gills	rp2	atrophy	2	1.3	2.9	1.6	2.07	3.56	3.67	4.7	3.92	3.04	2.53
+gills	rp2	necrosis	3	2.5	2.1	3.5	4.61	5.22	5.97	1.4	4.79	4.21	4.4
+#Regressive_changes: Supporting_tissue													
+gills	rp2	architec_alt	1	2	4.3	2.5	3	4.72	3.38	4.73	3.87	4.09	4.78
+gills	rp2	plasma_alt	1	1.3	2.8	2	4.99	4.49	4.27	4.09	3.66	3.72	3.31
+gills	rp2	deposits	1	2.5	3.1	1.4	4.79	4.21	4.4	2.73	3.92	2.76	3.44
+gills	rp2	nuclear_alt	2	0.8	1.1	3.7	3.25	4.1	3.38	4.37	4.93	5.55	3.6
+gills	rp2	atrophy	2	2.4	2	1.9	4.31	4.99	5.04	2.9	3.99	2.74	3.74
+gills	rp2	necrosis	3	3.4	2.3	1.3	3.06	4.85	3.92	4.81	4.11	3.8	3.94
+#Progressive_changes: Epithelium													
+gills	rp3	hypertrophy	1	1.4	2.3	0.5	3.4	5.45	4.13	3.88	4.44	2.98	2.87
+gills	rp3	hyperplasia	2	2	1.5	3.5	4.88	1.76	4.72	4.02	4.07	5.5	4.21
+#Progressive_changes: Supporting_tissue													
+gills	rp3	hypertrophy	1	2.4	2.7	0.6	3.17	4.74	3.5	4.76	4.67	3.03	4.76
+gills	rp3	hyperplasia	2	2.7	2.2	3.4	3.89	3.87	4.81	2.08	3.69	3.52	3.9
+#Inflammation													
+gills	rp4	exudate	1	2.7	3	2.8	4.26	3.71	3.97	3.22	4.98	4.74	3.11
+gills	rp4	Activation_RES	1	3.4	2.2	2.8	3.49	3.55	2.73	4.43	2.9	3.17	4.37
+gills	rp4	Infiltration	2	2.8	3.2	1.7	2.55	2.99	2.73	3.87	2.64	3.56	3.16
+#Tumor													
+gills	rp5	benign_tumor	2	2.9	2.5	1.5	3.27	3.87	2.76	5.44	2.73	4.25	3.01
+gills	rp5	malignant_tumor	3	1.9	3.1	1.5	3.17	4.65	3.76	5.02	4.37	4.29	3.73
+#Circulatory_disturbances													
+kidney	rp1	haem_hyper_aneu	1	3.3	2.5	4.1	4.02	3.81	3.93	2.67	3.98	4.4	5.28
+kidney	rp1	inter_oedema	1	3	0.9	2.7	3.1	5.38	3.74	4.7	6	3.02	6
+#Regressive_changes:Tubule													
+kidney	rp2	architec_alt	1	2.1	2.8	3.4	3	3.52	5.44	5.54	5.32	3.46	4.33
+kidney	rp2	plasma_alt	1	1.9	2.5	3.4	4.4	4.13	4.02	2.42	3.19	4.99	4.28
+kidney	rp2	deposits	1	3.5	4.1	3.8	4.31	4.45	5.78	4.32	4.07	2.54	4.08
+kidney	rp2	nuclear_alt	2	2.7	3.1	1.8	2.06	2.96	4.12	5.39	3.11	5.27	6
+kidney	rp2	atrophy	2	3.6	2.3	2.5	2.96	2.72	4.87	4.24	2.31	5.02	2.38
+kidney	rp2	necrosis	3	3.9	2.7	0.4	3.69	4.1	3.05	4.82	5.55	2.67	3.69
+#Regressive_changes: Interstitial tissue													
+kidney	rp2	architec_alt	1	1.7	1.7	1.1	2.82	3.44	5.61	2.04	5.04	2.89	4.38
+kidney	rp2	plasma_alt	1	0.7	1.3	1.4	4.86	4.09	4.41	4.52	4.93	3.83	4.8
+kidney	rp2	deposits	1	3.1	3.6	3.2	3.92	3.64	3.47	4.11	4.88	5.28	4.07
+kidney	rp2	nuclear_alt	2	4.9	1.2	2.1	4.12	3.83	1.9	4.56	2.98	3.59	5.03
+kidney	rp2	atrophy	2	3.6	2.5	0.8	4.64	4.86	4.86	3.19	3.2	4.85	3.14
+kidney	rp2	necrosis	3	4.3	2.7	3	5.28	3.77	4.93	3.17	3.62	5.83	4.16
+#Regressive_changes: Glomerulus													
+kidney	rp2	architec_alt	1	1.3	2.3	4	3.1	3.82	3.62	3.01	4.99	4.57	2.58
+kidney	rp2	plasma_alt	1	3.1	0.2	2.2	3.97	4.38	4.27	6	4.28	4.27	4.08
+kidney	rp2	deposits	1	1.7	2.1	3.4	3.45	4.19	3.5	4.46	3.23	4.12	5.47
+kidney	rp2	nuclear_alt	2	1.7	3.4	3.1	4.25	5.09	3.25	3.59	3.32	4.24	4.05
+kidney	rp2	atrophy	2	1.4	2.8	3.1	3.12	3.02	3.95	3.04	4.35	4.86	2.97
+kidney	rp2	necrosis	3	1.2	2.2	1.5	4.79	2.88	5.19	3.18	2.45	3.33	3.51
+#Progressive changes: Tubule													
+kidney	rp3	hypertrophy	1	2.4	3.8	1.8	3.76	3.76	5.93	4.15	3.45	5.44	5.31
+kidney	rp3	hyperplasia	2	3.1	0.4	2	1.17	3.5	5.16	2.82	4.85	5.7	4.66
+#Progressive changes: Glomerulus													
+kidney	rp3	hypertrophy	1	2.7	2.2	3.7	3.96	3.32	3.98	5.04	3.48	2.89	2.17
+kidney	rp3	hyperplasia	2	1.7	1.2	3.1	2.76	4.92	2.9	4.04	1.01	2.17	3.55
+#Progressive changes: Interstitial tissue													
+kidney	rp3	hypertrophy	1	3.3	2.8	2	2.56	2.59	4.19	2.96	4.8	3.43	4.94
+kidney	rp3	hyperplasia	2	2.8	2.1	3.5	2.95	3.17	4.55	3.48	4.25	3.97	5.15
+#Inflamation													
+kidney	rp4	exudate	1	4.5	3.4	1	3.15	5.05	4.51	5.43	6	4.91	3.88
+kidney	rp4	Activation_RES	1	2.9	2.8	2.5	3.18	2.83	4.2	3.76	3.1	3.78	4.39
+kidney	rp4	Infiltration	2	1.1	2.1	3.3	2.79	3.57	3.21	4.47	4.84	5.3	4.87
+#Tumor													
+kidney	rp5	benign_tumor	2	4.4	1.8	2.1	5.78	3.37	2.7	4.7	1.86	4.3	4.92
+kidney	rp5	malignant_tumor	3	3.7	3.9	-0.2	2.71	5.07	4.23	3.44	3.78	4.03	3.33
+#Circulatory_disturbances													
+liver	rp1	haem_hyper_aneu	1	3.3	2	2.6	4.98	3.12	4.42	2.72	4.28	3.3	2.82
+liver	rp1	inter_oedema	1	2.4	1.4	4.8	4.09	4.29	5.08	2.93	4.35	4.92	2.42
+#Regressive_changes: Liver Tissue													
+liver	rp2	architec_alt	1	2.5	2.4	1.2	4.06	2.11	3.54	1.5	3.3	5.06	3.88
+liver	rp2	plasma_alt	1	3.7	1.5	1.5	2.19	3.86	4.58	4.01	4.14	5.52	3.04
+liver	rp2	deposits	1	1.4	3.3	2	5.14	3.08	3.99	3.77	3.94	5.22	3.01
+liver	rp2	nuclear_alt	2	3	2.8	2.5	4.23	3.87	4.7	3.48	4.2	3.66	4.46
+liver	rp2	atrophy	2	2.5	3	3.1	3.07	3.45	3.99	5.2	3.55	4.44	5.7
+liver	rp2	necrosis	3	3.2	1.9	2.1	5.68	6	5.68	4.25	4.47	3.85	4.3
+#Regressive_changes: Interstitial tissue													
+liver	rp2	architec_alt	1	0.9	1.7	1.2	3.01	3.86	2.73	4.71	3.33	3.03	3.79
+liver	rp2	plasma_alt	1	1.6	2	2.4	4.43	3.05	3.08	3.46	4.05	4.77	2.5
+liver	rp2	deposits	1	4.3	2	4.9	3.12	6	4.28	3.79	3.58	6	4.05
+liver	rp2	nuclear_alt	2	1.9	4.1	2.4	3.89	4.11	3.91	3.42	3.45	2.83	2.58
+liver	rp2	atrophy	2	1.4	1.7	3.1	4.09	4.74	5.34	3.74	4.51	3.85	3.13
+liver	rp2	necrosis	3	3.1	1.6	3.2	2.31	1.7	3.3	3.6	3.04	5.53	2.47
+#Regressive_changes: Bile duct													
+liver	rp2	architec_alt	1	1.6	1.3	3.4	4.16	5.86	3.1	6	5.65	3.47	4.15
+liver	rp2	plasma_alt	1	1.8	3.3	0.2	4.89	3.41	4.85	3.82	3.51	3.03	4.16
+liver	rp2	deposits	1	1.6	1.7	2.2	2.76	4.84	1.25	3.51	3.92	5.28	4.46
+liver	rp2	nuclear_alt	2	1.2	0.3	3.5	4.11	4.84	3.21	3.82	4.4	5.22	2.75
+liver	rp2	atrophy	2	2.5	2.2	2.6	3.75	4.54	3.27	5.7	3.35	5.34	5.54
+liver	rp2	necrosis	3	2.5	2.3	2.5	4.85	4.66	3.95	5.13	4.92	4.27	4.13
+#Progressive changes: Liver tissue													
+liver	rp3	hypertrophy	1	3.4	2.1	1.2	5.25	3.82	4.1	3.08	4.81	4.39	4.39
+liver	rp3	hyperplasia	2	1.3	2.2	2.5	2.15	4.93	2.74	4.15	4.16	3.37	2.08
+#Progressive changes: Interstitial tissue													
+liver	rp3	hypertrophy	1	2.9	2.4	2.7	4.93	4.14	5.28	4.66	3.75	3.3	4.96
+liver	rp3	hyperplasia	2	3.5	3.5	3.4	4.3	4.15	3.24	3.15	4.87	3.31	5.52
+#Progressive changes: Bile duct													
+liver	rp3	hypertrophy	1	3.1	2.4	3.3	6	3.07	4.06	3.19	3.13	4.65	3.1
+liver	rp3	hyperplasia	2	1.5	3.6	2.4	3.42	2.77	4.49	3.7	3.05	4.64	3.63
+#Inflamation													
+liver	rp4	exudate	1	2	2.8	1.7	2.92	4.2	2.52	4.3	1.91	4.84	4.13
+liver	rp4	Activation_RES	1	2.4	3	3.4	2.66	4.23	4.17	6	2.62	2.61	3.4
+liver	rp4	Infiltration	2	4	3.7	2.3	5.16	4.94	3.67	2.57	2.6	3.71	3.27
+#Tumor													
+liver	rp5	benign_tumor	2	4.7	2.4	3.3	2.9	3.97	3.35	4.47	4.66	4.63	2.32
+liver	rp5	malignant_tumor	3	3.5	2.9	4	4.48	4.55	3.54	1.85	4.85	4.46	3.31
+#Circulatory_disturbances													
+skin	rp1	haem_hyper_aneu	1	2.3	2.2	2.1	3.42	3.56	4.19	4.93	4.64	3.79	3.79
+skin	rp1	inter_oedema	1	1.7	2.8	2.5	5.03	5.37	5.06	5.02	4.65	4.62	4.97
+#Regressive_changes: Epidermis													
+skin	rp2	architec_alt	1	2.9	1.9	2.5	4.12	4.62	3.7	2.82	3.9	4.12	3.75
+skin	rp2	plasma_alt	1	1	1.9	1.7	6	4.25	4.11	4.89	4.49	2.3	4.48
+skin	rp2	deposits	1	2.9	2.9	1.5	3.9	4.14	4.62	3.1	3.73	4.38	4.19
+skin	rp2	nuclear_alt	2	3.2	2.5	2	5.26	4.05	5.01	4.14	4.59	5.21	4.39
+skin	rp2	atrophy	2	3.1	3.2	4.3	3.59	5.37	2.92	3.38	3.84	2.99	5.29
+skin	rp2	necrosis	3	2.7	2.9	2.7	3.83	4.2	2.13	3.04	2.93	6	4.84
+#Regressive_changes: Basement_membrane													
+skin	rp2	def_base_membr	2	3.2	4.4	1.8	1.29	4.3	6	5.27	3.73	5.3	3.06
+#Regressive_changes: Dermis													
+skin	rp2	architec_alt	1	3.2	1.5	1.2	4.35	3.2	3.35	2.82	3.16	4.78	5.63
+skin	rp2	plasma_alt	1	1.5	3.3	3.4	4.88	3.66	3.26	4.77	6	2.75	4.12
+skin	rp2	deposits	1	2.5	3	2.6	3.57	2.19	4.38	5.52	4.93	5.45	3.18
+skin	rp2	nuclear_alt	2	0.7	2	2.8	3.37	3.44	3.12	6	5.02	5.18	2.87
+skin	rp2	atrophy	2	1.8	4	2.8	5.01	5.39	2.15	4.68	4.56	2.22	2.45
+skin	rp2	necrosis	3	1.5	2.1	1.9	4.64	5.42	3.76	2.04	3.82	4.4	4.12
+#Progressive changes: Epidermis													
+skin	rp3	hypertrophy	1	3.5	2.5	1.1	3.42	4.82	2.94	5.15	2.22	3.39	3.57
+skin	rp3	hyperplasia	2	2.1	2.6	2.2	5.53	3.3	3.89	3.23	4.72	4.87	3.55
+#Progressive changes: Dermis													
+skin	rp3	hypertrophy	1	3.5	2.1	1.6	4.59	1.73	4.59	4.02	3.43	4.75	3.75
+skin	rp3	hyperplasia	2	3.3	4.2	4.3	4.43	6	2.18	4.52	4.27	2.2	4.98
+#Inflamation													
+skin	rp4	exudate	1	2.7	2.6	1.3	4.13	4.38	4.74	3.4	4.55	2.97	4.24
+skin	rp4	Activation_RES	1	3.1	0.1	1.7	4.37	5.36	2.06	4.59	3.21	5.25	2.9
+skin	rp4	Infiltration	2	3.5	1.9	2	3.89	5.27	2.5	4.04	4.43	4.73	3.68
+#Tumor													
+skin	rp5	benign_tumor	2	3	2.4	2.7	2.8	4.68	3.77	3.39	2.67	4.24	5.01
+skin	rp5	malignant_tumor	3	0.7	1.9	3.7	3.88	3.71	4.48	2.63	3.95	2.32	3.9
